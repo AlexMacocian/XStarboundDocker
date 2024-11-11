@@ -1,0 +1,35 @@
+services:
+  install:
+    build: .
+    environment:
+      - TZ=Europe/London
+    volumes:
+      - steam-data:/root/Steam
+      - type: bind
+        source: D:/temp/starbound
+        target: /starbound
+        bind:
+          create_host_path: true
+    tty: true
+    stdin_open: true
+    entrypoint: ./install.sh
+    network_mode: bridge
+  server:
+    build: .
+    environment:
+      - TZ=Europe/London
+    volumes:
+      - steam-data:/root/Steam
+      - type: bind
+        source: D:/temp/starbound
+        target: /starbound
+        bind:
+          create_host_path: true
+    ports:
+      - '28015:28015/udp'
+      - '28016:28016/udp'
+    restart: unless-stopped
+    network_mode: bridge
+
+volumes:
+  steam-data:
