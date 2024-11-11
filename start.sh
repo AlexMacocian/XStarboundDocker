@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /starbound/steamapps/common/Starbound/server
+cd /starbound/server
 chmod +x xserver.sh
 ./xserver.sh
 
