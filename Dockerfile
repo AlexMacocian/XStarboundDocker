@@ -41,4 +41,7 @@ RUN /steamcmd/steamcmd.sh +force_install_dir /starbound/ +quit
 COPY start.sh /start.sh
 COPY install.sh /install.sh
 
+RUN chmod +x install.sh && \
+    chmod +x start.sh
+
 ENTRYPOINT ["./start.sh"]
