@@ -1,35 +1,41 @@
+x-common-base-config: &common-base-config
+  build: .
+  environment: 
+    - TZ=Europe/London
+  volumes:
+    - steam-data:/root/Steam
+    - type: bind
+      source: D:/temp/starbound
+      target: /starbound
+      bind:
+        create_host_path: true
+  network_mode: bridge
+  
+x-common-config: &common-config
+  <<: *common-base-config
+  #environment:
+  #  - STEAM_USER=your_username_here
+  #  - STEAM_PASS=your_password_here
+
 services:
   install:
-    build: .
-    environment:
-      - TZ=Europe/London
-    volumes:
-      - steam-data:/root/Steam
-      - type: bind
-        source: D:/temp/starbound
-        target: /starbound
-        bind:
-          create_host_path: true
+    <<: *common-config
     tty: true
     stdin_open: true
     entrypoint: ./install.sh
-    network_mode: bridge
+  install-skip-verify:
+    <<: *common-config
+    tty: true
+    stdin_open: true
+    entrypoint: ./install.sh --skip-verify
+  install-workshop-mods:
+    <<: *common-base-config
+    entrypoint: ./copy-mods.sh
   server:
-    build: .
-    environment:
-      - TZ=Europe/London
-    volumes:
-      - steam-data:/root/Steam
-      - type: bind
-        source: D:/temp/starbound
-        target: /starbound
-        bind:
-          create_host_path: true
+    <<: *common-base-config
     ports:
-      - '28015:28015/udp'
-      - '28016:28016/udp'
+      - '21025:21025/tcp'
     restart: unless-stopped
-    network_mode: bridge
 
 volumes:
   steam-data:

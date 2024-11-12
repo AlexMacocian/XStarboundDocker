@@ -21,7 +21,8 @@ RUN apt-get install -y \
     curl \
     wget \
     build-essential \
-    jq
+    jq \
+    rsync
 
 RUN mkdir -p /steamcmd
 RUN mkdir -p /starbound
@@ -40,8 +41,10 @@ RUN /steamcmd/steamcmd.sh +force_install_dir /starbound/ +quit
 
 COPY start.sh /start.sh
 COPY install.sh /install.sh
+COPY copy-mods.sh /copy-mods.sh
 
 RUN chmod +x install.sh && \
-    chmod +x start.sh
+    chmod +x start.sh && \
+    chmod +x copy-mods.sh
 
 ENTRYPOINT ["./start.sh"]
